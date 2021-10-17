@@ -14,6 +14,9 @@ from numba import njit, jit, cuda
 from multiprocessing import Queue, Process
 from pycparser.c_ast import While
 
+
+
+    
 def stopRecording():
     global keepRecording, btnStartRecording,btnStopRecording,screen_size
     keepRecording = False
@@ -21,7 +24,7 @@ def stopRecording():
     btnStopRecording["state"] = "disabled"
 
 def startRecording(monitor,SCREEN_SIZE):
-    global keepRecording, btnStartRecording,btnStopRecording
+    global keepRecording, btnStartRecording,btnStopRecording,screen_size
     y_p = int(floater.winfo_rooty()+screen_size[0]/2)
     x_p = int(floater.winfo_rootx()+screen_size[0]/2)
     floater.frame_position = [x_p,y_p] 
@@ -35,7 +38,7 @@ def startRecording(monitor,SCREEN_SIZE):
     window.iconify()
     threading.Thread(target=recordScreen,args=[FPS,monitor,SCREEN_SIZE]).start()
 
-def recordScreen(FPS,monitor,SCREEN_SIZE,):
+def recordScreen(FPS,monitor,SCREEN_SIZE):
     global keepRecording
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     output = cv2.VideoWriter("output.avi",fourcc,FPS,(SCREEN_SIZE))
@@ -79,7 +82,6 @@ def update_monitor():
 
     #top => offset_x
     #left => offset_y
-    
     monitor = {"top":top_padding-_offsetx,"left":left_padding-_offsety,"width":screen_size[0],"height":screen_size[1]}
     return monitor
 
@@ -132,7 +134,6 @@ if __name__ == "__main__":
     #screen_size Changes [s_logo.png => is 500*500px image with transparent background] 
     #eg. screen_size=[600,600] *requires 600*600 s_logo.png* file inorder to fit with in screen recoder.
     screen_size=[500,500]
-
     cv2.destroyAllWindows()
     window = tk.Tk()
     window.geometry('300x300')
@@ -143,13 +144,16 @@ if __name__ == "__main__":
     fpsSettings['values'] = (10, 15, 20, 25, 30,35,40, 45,50,55, 60)
     fpsSettings.current(4)
     fpsSettings.place(x=90, y=80,width = 115)
-    btnStartRecording = tk.Button(window, text = "Start Recording",command = lambda : startRecording(screen_size[0],screen_size[1]) )
+    
+    #Creating FloatingWindow With Canvas 
+    floater = FloatingWindow(window)
+
+    btnStartRecording = tk.Button(window, text = "Start Recording",command = lambda : startRecording(update_monitor(),screen_size))
     btnStartRecording.place(x=90, y=120)
     btnStopRecording = tk.Button(window, text = "Stop Recording", command = stopRecording)
     btnStopRecording.place(x=90,y=160)
     btnStopRecording["state"] = "disabled"
     
-    #Creating FloatingWindow With Canvas 
-    floater = FloatingWindow(window)
+  
     window.mainloop()
     
