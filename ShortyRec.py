@@ -17,6 +17,12 @@ from PIL import Image, ImageTk
 
 from pycparser.c_ast import While
 
+#Code isn't Oraganized very well.
+#This Program build for record YT-Shorts/Reels Techy videos Without. 
+#Current Features : Record Video in [AVI] format.
+#Future Feature : Audio : Mic Support / Noise Reduction
+#               : Video : More Video Output format / Filters () / Custom Logo / Text
+
 def stopRecording():
     global keepRecording, btnStartRecording,btnStopRecording,frame_position,screen_size
     pointer_in = False
@@ -123,14 +129,6 @@ class FloatingWindow(tk.Toplevel):
     def clickwin(self, event):
         self._offsetx = event.widget.winfo_rootx() - self.winfo_rootx() + event.x
         self._offsety = event.widget.winfo_rooty() - self.winfo_rooty() + event.y
-
-    def dragwin(self, event):
-        self._offsetx = screen_size[0]/2
-        self._offsety = screen_size[1]/2
-        self.mouseX = pyautogui.position()[0]
-        self.mouseY = pyautogui.position()[1]
-        self.frame_position = self.winfo_pointerxy()  
-        self.geometry("+%d+%d" % (self.mouseX-self._offsetx,self.mouseY-self._offsety))
 
 if __name__ == "__main__":
     global screen_size
